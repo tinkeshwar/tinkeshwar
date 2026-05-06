@@ -1,6 +1,6 @@
 const skills = [
   { title: 'Frontend & Full Stack', icon: '⚛', items: ['React.js', 'Next.js', 'Vue', 'Nuxt.js', 'Zustand', 'TypeScript', 'Tailwind CSS'], aug: 'tl-clip tr-round br-clip-x bl-scoop both' },
-  { title: 'Backend & Systems', icon: '⚙', items: ['Node.js', 'SQL', 'PostgreSQL', 'Docker', 'REST APIs', 'Multi-service architectures'], aug: 'tl-round tr-clip bl-clip-y br-scoop both' },
+  { title: 'Backend & Systems', icon: '⚙', items: ['Node.js', 'Python', 'SQL', 'PostgreSQL', 'Docker', 'REST APIs', 'Multi-service architectures'], aug: 'tl-round tr-clip bl-clip-y br-scoop both' },
   { title: 'Automation & Media', icon: '🤖', items: ['FFmpeg', 'SQLite', 'Worker pipelines', 'AI integration', 'FFprobe', 'Batch processing'], aug: 'tl-scoop tr-clip-y br-round bl-clip both' },
   { title: 'Embedded & IoT', icon: '📡', items: ['Arduino', 'ESP32', 'Home Assistant', 'Sensors', 'Motor drivers', 'MQTT', 'WiFi protocols'], aug: 'tl-clip-y tr-scoop br-clip bl-round both' },
 ]

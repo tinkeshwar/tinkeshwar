@@ -3,11 +3,12 @@ export default function Hero() {
     <section className="hero">
       <div data-augmented-ui="tl-clip-x tr-2-clip-y br-clip-x bl-2-clip-y both" className="aug-card aug-hero">
         <p className="subtitle">Full Stack Developer • IoT Engineer • Automation Architect</p>
-        <h1>Tinkeshwar Singh</h1>
-        <p>
-          Builder-engineer hybrid thriving at the intersection of automation,
-          embedded systems, and modern web technologies. I design intelligent,
-          well-structured systems that reduce manual effort and scale efficiently.
+        <h1>TINKESHWAR SINGH</h1>
+        <p style={{ textAlign: 'justify' }}>
+          Engineer. Builder. Systems thinker. <br/>
+          I design and develop end-to-end solutions that combine modern web technologies, 
+          automation, and hardware integration. Whether it's optimizing video processing with AI or building IoT-controlled systems, 
+          I focus on creating efficient, scalable, and intelligent workflows that reduce manual effort.
         </p>
         <p className="status-line">SYSTEM ONLINE — Available for collaboration</p>
       </div>
