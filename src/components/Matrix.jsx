@@ -75,7 +75,7 @@ export default function Matrix({ cursorRef, onCatch, onBomb, gameOver }) {
       {items.map(c => (
         <span
           key={c.id}
-          className={c.bomb ? 'matrix-bomb' : 'matrix-char'}
+          className={c.bomb ? 'matrix-bomb' : `matrix-char ${charClass(c.char)}`}
           style={{ left: c.x, top: c.y }}
         >
           {c.char}
@@ -83,4 +83,10 @@ export default function Matrix({ cursorRef, onCatch, onBomb, gameOver }) {
       ))}
     </div>
   )
+}
+
+function charClass(ch) {
+  if (/[0-9]/.test(ch)) return 'char-number'
+  if (/[A-Z]/.test(ch)) return 'char-alpha'
+  return 'char-special'
 }

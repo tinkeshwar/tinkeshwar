@@ -15,8 +15,12 @@ export default function App() {
   const [score, setScore] = useState(0)
   const [gameOver, setGameOver] = useState(false)
 
-  const handleCatch = useCallback(() => {
-    setScore(s => s + 1)
+  const handleCatch = useCallback((char) => {
+    setScore(s => {
+      if (/[0-9]/.test(char)) return s + 1
+      if (/[A-Z]/.test(char)) return s - 2
+      return s + 2 // special chars @#$%&*
+    })
   }, [])
 
   const handleBomb = useCallback(() => {

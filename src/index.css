@@ -468,10 +468,23 @@ footer .copyright {
   position: absolute;
   font-family: monospace;
   font-size: 16px;
-  color: var(--neon);
   opacity: 0.6;
-  text-shadow: 0 0 6px var(--neon);
   pointer-events: none;
+}
+
+.matrix-char.char-number {
+  color: var(--neon-green);
+  text-shadow: 0 0 6px var(--neon-green);
+}
+
+.matrix-char.char-alpha {
+  color: var(--neon-alt);
+  text-shadow: 0 0 6px var(--neon-alt);
+}
+
+.matrix-char.char-special {
+  color: var(--neon);
+  text-shadow: 0 0 6px var(--neon);
 }
 
 .matrix-bomb {
