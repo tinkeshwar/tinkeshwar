@@ -358,11 +358,25 @@ h1 {
 }
 
 @media (max-width: 720px) {
+  /* single column; photo on top, text/buttons below */
   .whoami {
     grid-template-columns: 1fr;
   }
-  .photo-frame {
-    max-width: 320px;
+  .whoami .photo-frame {
+    order: -1; /* move photo above the text block */
+    max-width: 100%; /* full screen width */
+    width: 100%;
+  }
+  /* photo scales with the screen: full width, height capped to the viewport */
+  .whoami .photo-frame__body {
+    display: block;
+    min-height: 0;
+  }
+  .whoami .photo-frame__img {
+    width: 100%;
+    height: auto;
+    max-height: 55vh; /* keep it from dominating tall phones */
+    object-fit: cover;
   }
   .bio {
     max-width: 70ch;
