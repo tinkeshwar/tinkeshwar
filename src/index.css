@@ -276,7 +276,7 @@ h1 {
   grid-template-columns: 1fr minmax(220px, 300px);
   gap: 1.5rem;
   align-items: stretch; /* photo frame matches the full left-column height (text + buttons) */
-  margin-bottom: 2.2rem;
+  margin-bottom: 1.2rem;
 }
 
 .whoami-left {
@@ -465,7 +465,7 @@ a:focus-visible {
 .hint {
   color: var(--dim);
   font-size: 0.78rem;
-  margin-top: 3rem;
+  margin-top: 1rem;
   border-top: 1px solid #16221d;
   padding-top: 1rem;
 }
