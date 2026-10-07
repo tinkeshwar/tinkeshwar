@@ -59,12 +59,14 @@ export default function BootSequence({ onDone }) {
       role="status"
       aria-label="System boot sequence. Press any key to skip."
     >
-      {bootLines.slice(0, count).map(([txt, cls, tail], idx) => (
-        <div className={`line ${cls || ''}`} key={idx}>
-          {txt}
-          {tail || ''}
-        </div>
-      ))}
+      <div className="boot-log">
+        {bootLines.slice(0, count).map(([txt, cls, tail], idx) => (
+          <div className={`line ${cls || ''}`} key={idx}>
+            {txt}
+            {tail || ''}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
