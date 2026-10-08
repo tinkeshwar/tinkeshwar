@@ -17,7 +17,7 @@ function respond(cmd) {
         '  about       the operator, verbose',
         '  contact     how to reach me',
         '  whoami      identity readout',
-        '  snake       play snake (arrows to move, esc to quit)',
+        '  snake       be snake (arrows to move, esc to quit)',
         '  date        current timestamp',
         '  echo <x>    print <x>',
         '  clear       wipe the screen',
@@ -47,7 +47,7 @@ function respond(cmd) {
       return ['request denied. this is a museum piece, not a sandbox.']
     case 'exit':
     case 'quit':
-      return ["there's no escape. it's a portfolio. (try: help)"]
+      return ["there's no escape. this is cruel world. (try: help)"]
     default:
       if (c.startsWith('echo ')) return [cmd.trim().slice(5)]
       return [`command not found: ${c}. type 'help'.`]

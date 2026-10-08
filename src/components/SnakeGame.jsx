@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const CELL = 20 // px per grid cell
+const CELL = 10 // px per grid cell
 const BASE_INTERVAL = 140 // ms per step at start
 const MIN_INTERVAL = 55 // fastest it can get
 const SPEEDUP_EVERY = 5 // bites between speed increases
