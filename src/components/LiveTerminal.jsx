@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { whoami, skills, projects, approach, about, contact, commands } from '../data'
 import SnakeGame from './SnakeGame'
+import PacmanGame from './PacmanGame'
 
 // Build the text response for a given command.
 function respond(cmd) {
@@ -18,6 +19,7 @@ function respond(cmd) {
         '  contact     how to reach me',
         '  whoami      identity readout',
         '  snake       be snake (arrows to move, esc to quit)',
+        '  pacman      play pac-man (arrows to move, esc to quit)',
         '  date        current timestamp',
         '  echo <x>    print <x>',
         '  clear       wipe the screen',
@@ -61,7 +63,7 @@ export default function LiveTerminal() {
   const [input, setInput] = useState('')
   const [history, setHistory] = useState([])
   const [histIdx, setHistIdx] = useState(-1)
-  const [playing, setPlaying] = useState(false)
+  const [game, setGame] = useState(null) // null | 'snake' | 'pacman'
   const bodyRef = useRef(null)
   const inputRef = useRef(null)
   const rootRef = useRef(null)
@@ -102,7 +104,11 @@ export default function LiveTerminal() {
     } else if (c === 'snake') {
       next.push({ kind: 'sys', text: 'launching snake… steer with arrow keys, esc to quit.' })
       setLines(next)
-      setPlaying(true)
+      setGame('snake')
+    } else if (c === 'pacman') {
+      next.push({ kind: 'sys', text: 'launching pac-man… steer with arrow keys, esc to quit.' })
+      setLines(next)
+      setGame('pacman')
     } else {
       const out = respond(cmd)
       if (out) out.forEach(t => next.push({ kind: 'out', text: t }))
@@ -113,9 +119,10 @@ export default function LiveTerminal() {
     setInput('')
   }
 
-  const exitSnake = () => {
-    setPlaying(false)
-    setLines(l => [...l, { kind: 'sys', text: 'snake terminated. back to the shell.' }])
+  const exitGame = () => {
+    const name = game === 'pacman' ? 'pac-man' : 'snake'
+    setGame(null)
+    setLines(l => [...l, { kind: 'sys', text: `${name} terminated. back to the shell.` }])
     // refocus the input after returning
     setTimeout(() => inputRef.current && inputRef.current.focus(), 0)
   }
@@ -158,8 +165,9 @@ export default function LiveTerminal() {
         <span className="live-term__title">tinkeshwar@os: ~/shell</span>
       </div>
       <div className="live-term__body" ref={bodyRef}>
-        {playing && <SnakeGame onExit={exitSnake} />}
-        {!playing && lines.map((l, i) => {
+        {game === 'snake' && <SnakeGame onExit={exitGame} />}
+        {game === 'pacman' && <PacmanGame onExit={exitGame} />}
+        {!game && lines.map((l, i) => {
           if (l.kind === 'cmd')
             return (
               <div className="live-term__line" key={i}>
@@ -172,7 +180,7 @@ export default function LiveTerminal() {
             </div>
           )
         })}
-        {!playing && (
+        {!game && (
           <div className="live-term__prompt">
             <span className="prompt">❯</span>
             <input
