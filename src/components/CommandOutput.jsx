@@ -72,11 +72,8 @@ function skillsRows() {
 function projectsRows() {
   return projects.map(p => (
     <span className={`card card--${p.status === 'active' ? 'a' : 'b'}`}>
-      <span className="card__head live-term__bar">
-        <span className="dot r" />
-        <span className="dot y" />
-        <span className="dot g" />
-        <span className="card__path live-term__title">
+      <span className="card__head">
+        <span className="card__path dim">
           ~/projects/<span className="k">{p.id}</span>
         </span>
         <span className={`st ${p.status === 'active' ? 'a' : 'b'}`}>

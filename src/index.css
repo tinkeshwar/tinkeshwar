@@ -314,38 +314,38 @@ body::before {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-bottom: 0.8rem;
+  /* TUI box: thin square border, title + status sit in gaps of the top edge */
+  position: relative;
+  margin-top: 0.6em;
+  padding: 1rem 0.85rem 0.8rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--panel);
-  box-shadow: 0 0 0 1px var(--border-soft), 0 8px 30px var(--shadow);
-  overflow: hidden;
   font-size: 0.8rem;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  transition: border-color 0.15s;
 }
 .card:hover {
   border-color: var(--accent);
-  box-shadow: 0 0 14px rgba(var(--glow-rgb), 0.25);
-  transform: translateY(-2px);
 }
 .card__head {
-  margin-bottom: 0.6rem;
-}
-.card__head .st {
-  margin-left: auto;
+  position: absolute;
+  top: -0.65em;
+  left: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
   font-size: 0.72rem;
+  line-height: 1.2;
+}
+/* background "cuts" the border line behind each label */
+.card__head > * {
+  background: var(--panel);
+  padding: 0 0.35rem;
 }
 .card__path {
-  font-size: 0.72rem;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.card .card__title,
-.card__desc,
-.card__stack {
-  padding: 0 0.85rem;
 }
 .card__desc {
   line-height: 1.5;
@@ -381,9 +381,6 @@ body::before {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .card:hover {
-    transform: none;
-  }
   .st.a .st__dot {
     animation: none;
   }
