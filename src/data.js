@@ -59,10 +59,12 @@ export const projects = [
   {
     id: 'U1',
     name: 'AI Video Optimization System',
+    slug: 'ai-video-optimization-system',
     status: 'active',
     desc: 'Scans a library, has OpenAI write per-video FFmpeg commands, and runs them on parallel workers, re-prompting itself when output comes out too big. React dashboard for approvals and audio/subtitle picks.',
     stack: ['Python', 'FastAPI', 'OpenAI', 'FFmpeg', 'React', 'SQLite', 'Docker'],
-    // Optional long-form page (#/projects/<id>). Sections render in order:
+    // `slug` is the permanent page URL (/projects/<slug>); keep it when renaming.
+    // Optional long-form page at that URL. Sections render in order:
     // `text` = paragraphs, `list` = bullets, `pre` = monospace block.
     detail: {
       meta: [
@@ -146,6 +148,7 @@ export const projects = [
   {
     id: 'U3',
     name: 'School Management Platform',
+    slug: 'school-management-platform',
     status: 'active',
     desc: 'Admissions, fees, academics, transport, library + planned AI chatbot.',
     stack: ['TypeScript', 'Koa', 'Next.js', 'MySQL', 'Python', 'OR-Tools'],
@@ -210,6 +213,7 @@ export const projects = [
   {
     id: 'U4',
     name: 'movie-tracker',
+    slug: 'movie-tracker',
     status: 'active',
     desc: 'Headless Radarr replacement in Rust. Speaks the Radarr v3 API so Prowlarr, Seerr & Recyclarr plug in unchanged; one static binary, hardlink imports.',
     stack: ['Rust', 'SQLite', 'Docker', 'qBittorrent', 'TMDb'],
@@ -266,6 +270,7 @@ export const projects = [
   {
     id: 'U5',
     name: 'show-tracker',
+    slug: 'show-tracker',
     status: 'active',
     desc: 'Headless Sonarr replacement in Rust. Serves the Sonarr v3 API: episode parsing, season-pack imports, RSS sync and one-command migration from Sonarr.',
     stack: ['Rust', 'SQLite', 'Docker', 'TMDb', 'TVmaze'],
@@ -321,6 +326,7 @@ export const projects = [
   {
     id: 'U6',
     name: 'API Bird',
+    slug: 'api-bird',
     status: 'active',
     desc: 'Local API workbench: projects → services → endpoints, OpenAPI/cURL import, saved requests. Exposes an MCP server so Claude can run the APIs too.',
     stack: ['Next.js', 'React', 'MongoDB', 'MCP', 'Electron'],
@@ -370,6 +376,7 @@ export const projects = [
   {
     id: 'U7',
     name: 'Ai Git Commit',
+    slug: 'ai-git-commit',
     status: 'active',
     desc: 'Desktop git client for one loop: pick files, get an AI-written Conventional Commit, commit, push. Works with API, local (Ollama) or CLI (claude/codex) models.',
     stack: ['Tauri', 'Rust', 'React', 'TypeScript', 'LLMs'],
@@ -425,6 +432,7 @@ export const projects = [
   {
     id: 'U8',
     name: 'Photo Printer',
+    slug: 'photo-printer',
     status: 'active',
     desc: 'Cross-platform app that lays out photos on A4 (grids or passport/4x6 sizes) with crop, rotate and cut lines, then exports a print-ready PDF.',
     stack: ['Tauri', 'Rust', 'React', 'TypeScript', 'pdf-lib'],
@@ -470,6 +478,7 @@ export const projects = [
   {
     id: 'U9',
     name: 'ai-planner',
+    slug: 'ai-planner',
     status: 'active',
     desc: 'Self-hosted dev docs manager that doubles as an MCP server: AI agents create and update plans, audits, issues and docs across projects; humans read and edit them in a markdown UI.',
     stack: ['Next.js', 'MongoDB', 'Mongoose', 'MCP', 'Docker'],
@@ -544,3 +553,6 @@ export const contact = [
   { key: 'linkedin', icon: 'in', label: 'linkedin.com/in/tinkeshwar-singh', href: 'https://www.linkedin.com/in/tinkeshwar-singh-02071b94/' },
   { key: 'email', icon: '✉', label: 'hello@tinkeshwar.com', href: 'mailto:hello@tinkeshwar.com' },
 ]
+
+// Projects with their own page at /projects/<slug>.
+export const pages = projects.filter(p => p.detail)

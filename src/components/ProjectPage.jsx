@@ -16,17 +16,17 @@ export default function ProjectPage({ project: p }) {
         <span className="dot r" aria-hidden="true" />
         <span className="dot y" aria-hidden="true" />
         <span className="dot g" aria-hidden="true" />
-        <span className="path">tinkeshwar@os:~/projects/{p.id}$</span>
-        <a className="project__back" href="#/">cd ..</a>
+        <span className="path">tinkeshwar@os:~/projects/{p.slug}$</span>
+        <a className="project__back" href="/">cd ..</a>
       </div>
 
       <article className="block project__doc">
         <div className="live-term__bar">
-          <span className="live-term__title">tinkeshwar@os: ~ $ cat ./projects/{p.id}/README.md</span>
+          <span className="live-term__title">tinkeshwar@os: ~ $ cat ./projects/{p.slug}/README.md</span>
         </div>
         <div className="out">
           <header className="project__hd">
-            <span className="dim">~/projects/<span className="k">{p.id}</span></span>
+            <span className="dim">~/projects/<span className="k">{p.slug}</span></span>
             <h1>{p.name}</h1>
             <p className="card__desc dim">{p.desc}</p>
             <div className="project__meta">
@@ -65,7 +65,7 @@ export default function ProjectPage({ project: p }) {
           ))}
         </div>
         <div className="block__exit dim">
-          [exit 0] ✓ EOF · <a href="#/">cd ..</a>
+          [exit 0] ✓ EOF · <a href="/">cd ..</a>
         </div>
       </article>
     </div>

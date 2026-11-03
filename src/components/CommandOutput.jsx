@@ -83,13 +83,13 @@ const V = '│\n'.repeat(120)
 
 function projectsRows() {
   return projects.map(p => {
-    // Only active projects with a write-up get their own page.
-    const open = p.status === 'active' && p.detail
+    // Projects with a write-up get their own page.
+    const open = !!p.detail
     const Card = open ? 'a' : 'span'
     return (
     <Card
       className={`card card--${p.status === 'active' ? 'a' : 'b'}`}
-      {...(open && { href: `#/projects/${p.id.toLowerCase()}`, 'aria-label': `${p.name}: read more` })}
+      {...(open && { href: `/projects/${p.slug}`, 'aria-label': `${p.name}: read more` })}
     >
       <span className="card__edge">
         <span className="bx">┌─</span>
