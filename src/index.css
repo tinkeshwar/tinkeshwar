@@ -311,41 +311,65 @@ body::before {
 }
 
 .card {
+  /* TUI box drawn with box-drawing chars: ┌─ path ── status ─┐ │ … │ └──┘ */
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* TUI box: thin square border, title + status sit in gaps of the top edge */
-  position: relative;
-  margin-top: 0.6em;
-  padding: 1rem 0.85rem 0.8rem;
-  border: 1px solid var(--border);
   font-size: 0.8rem;
-  transition: border-color 0.15s;
 }
-.card:hover {
-  border-color: var(--accent);
-}
-.card__head {
-  position: absolute;
-  top: -0.65em;
-  left: 0.6rem;
-  right: 0.6rem;
+.card__edge,
+.card__mid {
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  font-size: 0.72rem;
-  line-height: 1.2;
 }
-/* background "cuts" the border line behind each label */
-.card__head > * {
-  background: var(--panel);
-  padding: 0 0.35rem;
+.card__edge {
+  line-height: 1;
+  white-space: nowrap;
+}
+.card__mid {
+  flex: 1;
+}
+.bx {
+  color: var(--border);
+  white-space: pre;
+  transition: color 0.15s;
+}
+.card:hover .bx {
+  color: var(--accent);
+}
+/* long runs of ─ / │ clipped to the available space */
+.bx--run {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.bx--side {
+  position: relative;
+  flex: 0 0 1ch;
+  overflow: hidden;
+  line-height: 1;
+}
+.bx--side > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.card__path,
+.card__edge .st {
+  padding: 0 0.6ch;
+  font-size: 0.72rem;
 }
 .card__path {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+}
+.card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.8ch 0.4rem;
 }
 .card__desc {
   line-height: 1.5;

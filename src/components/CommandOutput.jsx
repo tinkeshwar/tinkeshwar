@@ -69,29 +69,47 @@ function skillsRows() {
   ))
 }
 
+// Box-drawing runs, clipped by CSS to whatever size the card ends up.
+const H = '─'.repeat(300)
+const V = '│\n'.repeat(120)
+
 function projectsRows() {
   return projects.map(p => (
     <span className={`card card--${p.status === 'active' ? 'a' : 'b'}`}>
-      <span className="card__head">
+      <span className="card__edge">
+        <span className="bx">┌─</span>
         <span className="card__path dim">
           ~/projects/<span className="k">{p.id}</span>
         </span>
+        <span className="bx bx--run" aria-hidden="true">{H}</span>
         <span className={`st ${p.status === 'active' ? 'a' : 'b'}`}>
           <span className="st__dot" aria-hidden="true" />
           {p.status}
         </span>
+        <span className="bx">─┐</span>
       </span>
-      <span className="card__title">{p.name}</span>
-      <span className="card__desc dim">{p.desc}</span>
-      {p.stack && (
-        <span className="card__stack">
-          {p.stack.map(s => (
-            <span className="tag" key={s}>
-              {s}
+      <span className="card__mid">
+        <span className="bx bx--side" aria-hidden="true"><span>{V}</span></span>
+        <span className="card__body">
+          <span className="card__title">{p.name}</span>
+          <span className="card__desc dim">{p.desc}</span>
+          {p.stack && (
+            <span className="card__stack">
+              {p.stack.map(s => (
+                <span className="tag" key={s}>
+                  {s}
+                </span>
+              ))}
             </span>
-          ))}
+          )}
         </span>
-      )}
+        <span className="bx bx--side" aria-hidden="true"><span>{V}</span></span>
+      </span>
+      <span className="card__edge" aria-hidden="true">
+        <span className="bx">└</span>
+        <span className="bx bx--run">{H}</span>
+        <span className="bx">┘</span>
+      </span>
     </span>
   ))
 }
