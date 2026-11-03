@@ -8,6 +8,49 @@
   --amber: #ffb000;
   --red: #ff4d4d;
   --font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --surface: #0c1510;
+  --border: #1c2a26;
+  --border-soft: #0f1512;
+  --border-amber: #4a3a12;
+  --fg2: #aee9d8;
+  --strong: #fff;
+  --on-accent: #031b06;
+  --glow-rgb: 57, 255, 20;
+  --overlay: rgba(5, 6, 10, 0.85);
+  --shadow: rgba(0, 0, 0, 0.5);
+  --vignette: rgba(0, 0, 0, 0.9);
+  --scanlines: 0.35;
+  --scanline-bg: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0, 0, 0, 0.25) 2px 3px);
+  color-scheme: dark;
+}
+
+/* light theme (follows the system setting): cool phosphor.
+   The green screen inverted: mint-white glass, deep terminal green + cyan, faint scanlines. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #eef4f1;
+    --panel: #ffffff;
+    --surface: #e3eee9;
+    --fg: #102a20;
+    --fg2: #24463a;
+    --dim: #4f6b61;
+    --strong: #06140e;
+    --accent: #007a34;
+    --accent2: #00718c;
+    --amber: #985b00;
+    --red: #c62828;
+    --border: #c3d8cf;
+    --border-soft: #dce9e3;
+    --border-amber: #e2c58a;
+    --on-accent: #ffffff;
+    --glow-rgb: 0, 122, 52;
+    --overlay: rgba(238, 244, 241, 0.92);
+    --shadow: rgba(16, 42, 32, 0.1);
+    --vignette: rgba(16, 42, 32, 0.12);
+    --scanline-bg: repeating-linear-gradient(0deg, transparent 0 2px, rgba(16, 42, 32, 0.06) 2px 3px);
+    --scanlines: 1;
+    color-scheme: light;
+  }
 }
 
 * {
@@ -37,8 +80,8 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 999;
-  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0, 0, 0, 0.25) 2px 3px);
-  opacity: 0.35;
+  background: var(--scanline-bg);
+  opacity: var(--scanlines);
   mix-blend-mode: multiply;
 }
 
@@ -48,7 +91,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 998;
-  box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0 0 180px var(--vignette);
 }
 
 /* ---- boot sequence ---- */
@@ -120,7 +163,7 @@ body::before {
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  border: 1px solid #1c2a26;
+  border: 1px solid var(--border);
   background: var(--panel);
   padding: 0.5rem 0.9rem;
   border-radius: 8px;
@@ -128,7 +171,7 @@ body::before {
   position: sticky;
   top: 12px;
   z-index: 5;
-  box-shadow: 0 0 0 1px #0f1512, 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 1px var(--border-soft), 0 8px 30px var(--shadow);
 }
 
 .dot {
@@ -156,6 +199,7 @@ body::before {
   color: var(--accent);
 }
 
+
 .blink::after {
   content: '▊';
   animation: bl 1s steps(1) infinite;
@@ -171,7 +215,7 @@ body::before {
   color: var(--accent);
 }
 .cmd {
-  color: #fff;
+  color: var(--strong);
 }
 .cmdline {
   word-break: break-word;
@@ -225,7 +269,7 @@ body::before {
   justify-content: center;
   width: 1.7rem;
   height: 1.7rem;
-  border: 1px solid #22402f;
+  border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--accent);
   line-height: 1;
@@ -235,7 +279,7 @@ body::before {
   width: 1rem;
   height: 1rem;
   display: block;
-  filter: drop-shadow(0 0 4px rgba(57, 255, 20, 0.55));
+  filter: drop-shadow(0 0 4px rgba(var(--glow-rgb), 0.55));
 }
 
 .row-kv a:hover .contact-icon,
@@ -247,9 +291,9 @@ body::before {
 h1 {
   font-size: 2.4rem;
   letter-spacing: 1px;
-  color: #fff;
+  color: var(--strong);
   margin: 0.2rem 0;
-  text-shadow: 0 0 18px rgba(57, 255, 20, 0.5);
+  text-shadow: 0 0 18px rgba(var(--glow-rgb), 0.5);
   word-break: break-word;
 }
 
@@ -262,7 +306,7 @@ h1 {
 
 .bio {
   max-width: 60ch;
-  color: #aee9d8;
+  color: var(--fg2);
   margin-top: 0.8rem;
 }
 
@@ -298,11 +342,11 @@ h1 {
 .photo-frame {
   display: flex;
   flex-direction: column;
-  border: 1px solid #1c2a26;
+  border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--panel);
   overflow: hidden;
-  box-shadow: 0 0 0 1px #0f1512, 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 1px var(--border-soft), 0 8px 30px var(--shadow);
   min-height: 0;
 }
 
@@ -311,8 +355,8 @@ h1 {
   align-items: center;
   gap: 0.4rem;
   padding: 0.45rem 0.7rem;
-  background: #0c1510;
-  border-bottom: 1px solid #1c2a26;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .photo-frame__title {
@@ -327,7 +371,7 @@ h1 {
   align-items: center;
   justify-content: center;
   min-height: 220px;
-  background: radial-gradient(circle at 50% 40%, #0b1a12, var(--bg));
+  background: radial-gradient(circle at 50% 40%, var(--surface), var(--bg));
   overflow: hidden;
 }
 
@@ -344,17 +388,17 @@ h1 {
   font-family: var(--font);
   font-size: 0.72rem;
   line-height: 1.3;
-  text-shadow: 0 0 6px rgba(57, 255, 20, 0.4);
+  text-shadow: 0 0 6px rgba(var(--glow-rgb), 0.4);
   margin: 0;
   text-align: left;
 }
 
 .photo-frame__caption {
   padding: 0.45rem 0.7rem;
-  border-top: 1px solid #1c2a26;
+  border-top: 1px solid var(--border);
   color: var(--dim);
   font-size: 0.74rem;
-  background: #0c1510;
+  background: var(--surface);
 }
 
 @media (max-width: 720px) {
@@ -392,9 +436,9 @@ h1 {
 
 .cmdbar button {
   font: inherit;
-  background: #0c1510;
+  background: var(--surface);
   color: var(--accent);
-  border: 1px solid #1f3a2c;
+  border: 1px solid var(--border);
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   cursor: pointer;
@@ -403,8 +447,8 @@ h1 {
 
 .cmdbar button:hover {
   background: var(--accent);
-  color: #031b06;
-  box-shadow: 0 0 14px rgba(57, 255, 20, 0.6);
+  color: var(--on-accent);
+  box-shadow: 0 0 14px rgba(var(--glow-rgb), 0.6);
 }
 
 .cmdbar button:focus-visible {
@@ -421,7 +465,7 @@ table {
 td {
   padding: 0.25rem 0.9rem 0.25rem 0;
   vertical-align: top;
-  border-bottom: 1px dashed #16221d;
+  border-bottom: 1px dashed var(--border-soft);
 }
 
 td.k {
@@ -431,7 +475,7 @@ td.k {
 
 .tag {
   display: inline-block;
-  border: 1px solid #22402f;
+  border: 1px solid var(--border);
   color: var(--accent);
   padding: 0.05rem 0.45rem;
   margin: 0.12rem;
@@ -447,11 +491,11 @@ td.k {
 }
 .st.a {
   color: var(--accent);
-  border-color: #22402f;
+  border-color: var(--border);
 }
 .st.b {
   color: var(--amber);
-  border-color: #4a3a12;
+  border-color: var(--border-amber);
 }
 
 a {
@@ -466,7 +510,7 @@ a:focus-visible {
   color: var(--dim);
   font-size: 0.78rem;
   margin-top: 1rem;
-  border-top: 1px solid #16221d;
+  border-top: 1px solid var(--border-soft);
   padding-top: 1rem;
 }
 
@@ -475,10 +519,10 @@ a:focus-visible {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  border: 1px solid #1c2a26;
+  border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--panel);
-  box-shadow: 0 0 0 1px #0f1512, 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 1px var(--border-soft), 0 8px 30px var(--shadow);
   overflow: hidden;
   cursor: text;
   /* height is measured in JS to fill the remaining viewport space exactly;
@@ -491,8 +535,8 @@ a:focus-visible {
   align-items: center;
   gap: 0.4rem;
   padding: 0.45rem 0.7rem;
-  background: #0c1510;
-  border-bottom: 1px solid #1c2a26;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   flex: 0 0 auto;
 }
 
@@ -532,7 +576,7 @@ a:focus-visible {
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--strong);
   font: inherit;
   caret-color: var(--accent);
   padding: 0;
@@ -572,7 +616,7 @@ a:focus-visible {
   align-self: center;
   max-width: 100%;
   object-fit: contain;
-  border: 1px solid #1c2a26;
+  border: 1px solid var(--border);
   border-radius: 4px;
   image-rendering: pixelated;
 }
@@ -587,7 +631,7 @@ a:focus-visible {
   gap: 0.8rem;
   text-align: center;
   padding: 1rem;
-  background: rgba(5, 6, 10, 0.85);
+  background: var(--overlay);
   backdrop-filter: blur(2px);
 }
 
@@ -600,14 +644,14 @@ a:focus-visible {
 
 .arcade__over-msg.win {
   color: var(--accent);
-  text-shadow: 0 0 12px rgba(57, 255, 20, 0.6);
+  text-shadow: 0 0 12px rgba(var(--glow-rgb), 0.6);
 }
 
 .arcade__btn {
   font: inherit;
-  background: #0c1510;
+  background: var(--surface);
   color: var(--accent);
-  border: 1px solid #1f3a2c;
+  border: 1px solid var(--border);
   padding: 0.4rem 0.9rem;
   border-radius: 6px;
   cursor: pointer;
@@ -617,9 +661,9 @@ a:focus-visible {
 .arcade__btn:hover,
 .arcade__btn:focus-visible {
   background: var(--accent);
-  color: #031b06;
+  color: var(--on-accent);
   outline: none;
-  box-shadow: 0 0 14px rgba(57, 255, 20, 0.6);
+  box-shadow: 0 0 14px rgba(var(--glow-rgb), 0.6);
 }
 
 /* ---- reduced motion: freeze animations ---- */
