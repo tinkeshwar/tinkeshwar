@@ -7,7 +7,8 @@
   --accent2: #00e5ff;
   --amber: #ffb000;
   --red: #ff4d4d;
-  --font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --font: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --font-display: 'VT323', var(--font);
   --surface: #0c1510;
   --border: #1c2a26;
   --border-soft: #0f1512;
@@ -419,8 +420,11 @@ body::before {
 }
 
 h1 {
-  font-size: 2.4rem;
-  letter-spacing: 1px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 3.4rem;
+  line-height: 1;
+  letter-spacing: 2px;
   color: var(--strong);
   margin: 0.2rem 0;
   text-shadow: 0 0 18px rgba(var(--glow-rgb), 0.5);
@@ -821,7 +825,7 @@ a:focus-visible {
     font-size: 14px;
   }
   h1 {
-    font-size: 1.8rem;
+    font-size: 2.6rem;
   }
   .shell {
     padding: 1.25rem 0.9rem 4rem;
