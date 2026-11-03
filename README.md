@@ -83,9 +83,6 @@ I'm a **Full Stack Developer** and technology enthusiast who enjoys building, ex
 <p align="center">
   <img src="https://streak-stats.demolab.com?user=tinkeshwar&hide_border=true&background=0d1117&ring=33ff66&fire=ff9f1c&currStreakLabel=33ff66&sideLabels=c9d1d9&currStreakNum=ffffff&sideNums=ffffff&dates=8b949e" />
 </p>
-<p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=tinkeshwar&bg_color=0d1117&color=33ff66&line=33ff66&point=ffffff&area=true&area_color=33ff66&hide_border=true" width="100%" />
-</p>
 
 ## 🐛 `$ ./about`
 
