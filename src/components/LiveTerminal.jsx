@@ -9,6 +9,20 @@ const GAMES = {
   pacman: { label: 'pac-man', Component: PacmanGame },
 }
 
+// 4 distinct random digits, e.g. '0381'.
+const newSecret = () => [...'0123456789'].sort(() => Math.random() - 0.5).slice(0, 4).join('')
+
+// bulls = right digit, right place; cows = right digit, wrong place.
+function score(secret, guess) {
+  let bulls = 0
+  let cows = 0
+  ;[...guess].forEach((d, i) => {
+    if (secret[i] === d) bulls++
+    else if (secret.includes(d)) cows++
+  })
+  return { bulls, cows }
+}
+
 // Build the text response for a given command.
 function respond(cmd) {
   const c = cmd.trim().toLowerCase()
@@ -26,6 +40,7 @@ function respond(cmd) {
         '  whoami      identity readout',
         '  snake       be snake (arrows to move, esc to quit)',
         '  pacman      play pac-man (arrows to move, esc to quit)',
+        '  cowbull     guess the 4-digit code (cows & bulls)',
         '  date        current timestamp',
         '  shutdown    power off the machine',
         '  restart     reboot the machine',
@@ -73,6 +88,7 @@ export default function LiveTerminal() {
   const [histIdx, setHistIdx] = useState(-1)
   const [game, setGame] = useState(null) // null | 'snake' | 'pacman'
   const [down, setDown] = useState(false)
+  const [cowbull, setCowbull] = useState(null) // null | { secret, tries }
   const bodyRef = useRef(null)
   const inputRef = useRef(null)
   const rootRef = useRef(null)
@@ -108,7 +124,33 @@ export default function LiveTerminal() {
     const cmd = input
     const c = cmd.trim().toLowerCase()
     const next = [...lines, { kind: 'cmd', text: cmd }]
-    if (c === 'clear') {
+    if (cowbull) {
+      const guess = c.replace(/\s+/g, '')
+      if (['q', 'quit', 'exit'].includes(guess)) {
+        next.push({ kind: 'sys', text: `gave up. the code was ${cowbull.secret}.` })
+        setCowbull(null)
+      } else if (!/^\d{4}$/.test(guess) || new Set(guess).size !== 4) {
+        next.push({ kind: 'out', text: 'enter 4 distinct digits (or q to quit).' })
+      } else {
+        const tries = cowbull.tries + 1
+        const { bulls, cows } = score(cowbull.secret, guess)
+        if (bulls === 4) {
+          next.push({ kind: 'sys', text: `🐂🐂🐂🐂 cracked ${guess} in ${tries} ${tries === 1 ? 'try' : 'tries'}!` })
+          setCowbull(null)
+        } else {
+          next.push({ kind: 'out', text: `#${tries}  ${guess}  →  ${bulls} bull${bulls === 1 ? '' : 's'}, ${cows} cow${cows === 1 ? '' : 's'}` })
+          setCowbull({ ...cowbull, tries })
+        }
+      }
+      setLines(next)
+    } else if (c === 'cowbull' || c === 'cows' || c === 'bulls') {
+      next.push(
+        { kind: 'sys', text: "i'm thinking of a 4-digit code, all digits different. guess it." },
+        { kind: 'out', text: 'bull = right digit, right spot · cow = right digit, wrong spot · q to quit' }
+      )
+      setLines(next)
+      setCowbull({ secret: newSecret(), tries: 0 })
+    } else if (c === 'clear') {
       setLines([])
     } else if (/^(restart|reboot)\b/.test(c)) {
       next.push(
@@ -222,7 +264,7 @@ export default function LiveTerminal() {
               autoCapitalize="off"
               autoComplete="off"
               aria-label="Terminal command input"
-              placeholder="type a command… (try: help)"
+              placeholder={cowbull ? 'guess 4 digits… (q to quit)' : 'type a command… (try: help)'}
             />
           </div>
         )}
