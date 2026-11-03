@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { whoami, skills, projects, approach, about, contact, commands } from '../data'
 import SnakeGame from './SnakeGame'
 import PacmanGame from './PacmanGame'
+import Shutdown from './Shutdown'
 
 const GAMES = {
   snake: { label: 'snake', Component: SnakeGame },
@@ -26,6 +27,8 @@ function respond(cmd) {
         '  snake       be snake (arrows to move, esc to quit)',
         '  pacman      play pac-man (arrows to move, esc to quit)',
         '  date        current timestamp',
+        '  shutdown    power off the machine',
+        '  restart     reboot the machine',
         '  echo <x>    print <x>',
         '  clear       wipe the screen',
         '  help        this list',
@@ -69,6 +72,7 @@ export default function LiveTerminal() {
   const [history, setHistory] = useState([])
   const [histIdx, setHistIdx] = useState(-1)
   const [game, setGame] = useState(null) // null | 'snake' | 'pacman'
+  const [down, setDown] = useState(false)
   const bodyRef = useRef(null)
   const inputRef = useRef(null)
   const rootRef = useRef(null)
@@ -106,6 +110,23 @@ export default function LiveTerminal() {
     const next = [...lines, { kind: 'cmd', text: cmd }]
     if (c === 'clear') {
       setLines([])
+    } else if (/^(restart|reboot)\b/.test(c)) {
+      next.push(
+        { kind: 'sys', text: 'Broadcast message from tinkeshwar@os: the system is going down for reboot NOW!' },
+        { kind: 'out', text: '[  OK  ] Stopped side projects.' },
+        { kind: 'out', text: '[  OK  ] Reached target Reboot.' }
+      )
+      setLines(next)
+      setTimeout(() => setDown('reboot'), 900)
+    } else if (/^(shutdown|poweroff|halt)\b/.test(c)) {
+      next.push(
+        { kind: 'sys', text: 'Broadcast message from tinkeshwar@os: the system is going down for poweroff NOW!' },
+        { kind: 'out', text: '[  OK  ] Stopped side projects.' },
+        { kind: 'out', text: '[  OK  ] Stopped coffee.service.' },
+        { kind: 'out', text: '[  OK  ] Reached target Power-Off.' }
+      )
+      setLines(next)
+      setTimeout(() => setDown(true), 900)
     } else if (Object.hasOwn(GAMES, c)) {
       next.push({ kind: 'sys', text: `launching ${GAMES[c].label}… steer with arrow keys, esc to quit.` })
       setLines(next)
@@ -152,6 +173,12 @@ export default function LiveTerminal() {
 
   const Game = game && GAMES[game].Component
 
+  const powerOn = () => {
+    setDown(false)
+    setLines(l => [...l, { kind: 'sys', text: 'nice try. this machine has no off switch. uptime: forever.' }])
+    setTimeout(() => inputRef.current && inputRef.current.focus(), 0)
+  }
+
   return (
     <section
       className="live-term"
@@ -166,6 +193,7 @@ export default function LiveTerminal() {
         <span className="dot g" />
         <span className="live-term__title">tinkeshwar@os: ~/shell</span>
       </div>
+      {down && <Shutdown onDone={powerOn} reboot={down === 'reboot'} />}
       <div className="live-term__body" ref={bodyRef}>
         {Game && <Game onExit={exitGame} />}
         {!game && lines.map((l, i) => {
@@ -176,7 +204,7 @@ export default function LiveTerminal() {
               </div>
             )
           return (
-            <div className={`live-term__line ${l.kind === 'sys' ? 'dim' : 'out'}`} key={i}>
+            <div className={`live-term__line ${l.kind === 'sys' ? 'dim' : 'live-term__line--out'}`} key={i}>
               {l.text}
             </div>
           )
