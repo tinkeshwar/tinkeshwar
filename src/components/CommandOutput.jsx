@@ -163,19 +163,22 @@ function aboutRows() {
 }
 
 function contactRows() {
-  return contact.map(c => {
-    const Icon = contactIcons[c.key]
-    return (
-      <a className="link-row" href={c.href} target="_blank" rel="noopener noreferrer">
-        <span className="contact-icon" aria-hidden="true">
-          {Icon ? <Icon /> : c.icon}
-        </span>
-        <span className="k">{c.key}</span>
-        <span className="link-row__label">{c.label}</span>
-        <span className="link-row__go" aria-hidden="true">↗</span>
-      </a>
-    )
-  })
+  return [
+    <span className="cf__cm"># /etc/contact — reach the human behind this terminal</span>,
+    <span className="cf__cm"># format: service = address   (click a line to open)</span>,
+    ...contact.map(c => {
+      const Icon = contactIcons[c.key]
+      return (
+        <a className="cf" href={c.href} target="_blank" rel="noopener noreferrer">
+          <span className="cf__icon" aria-hidden="true">{Icon ? <Icon /> : c.icon}</span>
+          <span className="cf__key">{c.key}</span>
+          <span className="cf__eq" aria-hidden="true">=</span>
+          <span className="cf__val">{c.label}</span>
+          <span className="cf__go" aria-hidden="true"># open ↗</span>
+        </a>
+      )
+    }),
+  ]
 }
 
 const rowBuilders = {
