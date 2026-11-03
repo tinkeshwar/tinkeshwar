@@ -82,8 +82,15 @@ const H = '─'.repeat(300)
 const V = '│\n'.repeat(120)
 
 function projectsRows() {
-  return projects.map(p => (
-    <span className={`card card--${p.status === 'active' ? 'a' : 'b'}`}>
+  return projects.map(p => {
+    // Only active projects with a write-up get their own page.
+    const open = p.status === 'active' && p.detail
+    const Card = open ? 'a' : 'span'
+    return (
+    <Card
+      className={`card card--${p.status === 'active' ? 'a' : 'b'}`}
+      {...(open && { href: `#/projects/${p.id.toLowerCase()}`, 'aria-label': `${p.name}: read more` })}
+    >
       <span className="card__edge">
         <span className="bx">┌─</span>
         <span className="card__path dim">
@@ -116,10 +123,12 @@ function projectsRows() {
       <span className="card__edge" aria-hidden="true">
         <span className="bx">└</span>
         <span className="bx bx--run">{H}</span>
-        <span className="bx">┘</span>
+        {open && <span className="card__open">cat README ↗</span>}
+        <span className="bx">{open ? '─┘' : '┘'}</span>
       </span>
-    </span>
-  ))
+    </Card>
+    )
+  })
 }
 
 function approachRows() {

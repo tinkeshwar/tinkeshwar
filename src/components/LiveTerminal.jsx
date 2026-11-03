@@ -108,7 +108,8 @@ export default function LiveTerminal() {
     window.addEventListener('resize', measure)
     // Re-measure when content above changes size (feed grows, image loads, etc.)
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null
-    if (ro && document.querySelector('.shell')) ro.observe(document.querySelector('.shell'))
+    const shell = rootRef.current?.closest('.shell')
+    if (ro && shell) ro.observe(shell)
     return () => {
       window.removeEventListener('resize', measure)
       if (ro) ro.disconnect()

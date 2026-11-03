@@ -1093,3 +1093,109 @@ body.crt-on #root {
   body.crt-on #root { animation: none; }
   .poweroff__msg { animation: none; }
 }
+
+/* ---- clickable project cards ---- */
+a.card {
+  color: inherit;
+  text-decoration: none;
+}
+.card__open {
+  padding: 0 0.6ch;
+  font-size: 0.68rem;
+  color: var(--dim);
+  transition: color 0.15s;
+}
+a.card:hover .card__open,
+a.card:focus-visible .card__open {
+  color: var(--accent);
+}
+
+/* ---- project detail page ---- */
+.project__back {
+  margin-left: auto;
+  color: var(--accent);
+  text-decoration: none;
+}
+.project__back::before {
+  content: '$ ';
+  color: var(--dim);
+}
+.project__back:hover {
+  text-decoration: underline;
+}
+.project__doc {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 8px 30px var(--shadow);
+  overflow: hidden;
+  animation: rowin 0.25s ease both;
+}
+.project__doc .out {
+  padding: 1.2rem 1.4rem;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.project__hd {
+  display: grid;
+  gap: 0.6rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--border);
+}
+.project__hd h1 {
+  font-size: 2.6rem;
+}
+.project__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.4rem;
+  font-size: 0.78rem;
+}
+.project__sec {
+  margin-top: 1.6rem;
+}
+.project__sec h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+.project__sec p + p {
+  margin-top: 0.7rem;
+}
+.project__sec ul {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+.project__sec li {
+  position: relative;
+  padding-left: 2ch;
+}
+.project__sec li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--accent2);
+}
+.project__sec pre {
+  font: inherit;
+  font-size: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+  color: var(--fg2);
+}
+@media (max-width: 600px) {
+  .project__doc .out {
+    padding: 1rem;
+  }
+  .project__hd h1 {
+    font-size: 2rem;
+  }
+}
