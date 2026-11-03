@@ -46,6 +46,7 @@ export default function Shell({ visible }) {
           <CommandOutput
             key={item.id}
             name={item.name}
+            onClose={() => setFeed(f => f.filter(x => x.id !== item.id))}
             onReveal={() => {
               if (feedTopRef.current) {
                 feedTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })

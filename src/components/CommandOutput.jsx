@@ -55,18 +55,26 @@ function TypedRows({ rows, onDone }) {
 
 // Each section returns an array of row nodes (so they can stream in one by one).
 function skillsRows() {
-  return skills.map(row => (
-    <span className="row-kv">
-      <span className="k">{row.group}</span>
-      <span className="tags">
-        {row.items.map(i => (
-          <span className="tag" key={i}>
-            {i}
-          </span>
-        ))}
+  const last = skills.length - 1
+  return [
+    <span className="js"><span className="js__p">{'{'}</span></span>,
+    ...skills.map((row, r) => (
+      <span className="js js--kv">
+        <span className="js__key">"{row.group}"</span>
+        <span className="js__p">: [</span>
+        <span className="js__arr">
+          {row.items.map((i, n) => (
+            <span className="js__item" key={i}>
+              <span className="js__str">"{i}"</span>
+              {n < row.items.length - 1 && <span className="js__p">,</span>}
+            </span>
+          ))}
+        </span>
+        <span className="js__p">]{r < last && ','}</span>
       </span>
-    </span>
-  ))
+    )),
+    <span className="js"><span className="js__p">{'}'}</span></span>,
+  ]
 }
 
 // Box-drawing runs, clipped by CSS to whatever size the card ends up.
@@ -115,26 +123,41 @@ function projectsRows() {
 }
 
 function approachRows() {
-  return approach.map((a, i) => (
-    <span className="row-kv">
-      <span className="k">{String(i + 1).padStart(2, '0')}</span>
-      <span>
-        <span className="card__title">{a.title}</span>
-        <span className="dim">{a.desc}</span>
+  const flags = approach.map(a => `--${a.key}`).join(' | ')
+  return [
+    <span className="man__hd"><b>PHILOSOPHY(7)</b><span className="dim">Engineer's Manual</span><b>PHILOSOPHY(7)</b></span>,
+    <span className="man__sec">NAME</span>,
+    <span className="man__in">philosophy — how tinkeshwar builds things</span>,
+    <span className="man__sec">SYNOPSIS</span>,
+    <span className="man__in"><b>philosophy</b> [<span className="man__fl">{flags}</span>]</span>,
+    <span className="man__sec">OPTIONS</span>,
+    ...approach.map(a => (
+      <span className="man__opt">
+        <span className="man__fl">--{a.key}</span>
+        <span className="man__name"><b>{a.title}</b><span className="dim">{a.desc}.</span></span>
       </span>
-    </span>
-  ))
+    )),
+    <span className="man__hd man__ft dim"><span>tinkeshwar.com</span><span>2026</span><span>PHILOSOPHY(7)</span></span>,
+    <span className="man__less"> Manual page philosophy(7) line 1 (END) (press q to quit)</span>,
+  ]
 }
 
 function aboutRows() {
-  return [
-    ['# known_bug', about.knownBug],
-    ['strengths', about.strengths],
-    ['growth', about.growth],
-  ].map(([label, text]) => (
-    <span className="field">
-      <span className="label">{label}:</span>
-      <span>{text}</span>
+  const list = t => t.replace(/\.$/, '').split(', ')
+  const lines = [
+    ['info', 'init', 'loading profile=tinkeshwar mode=verbose'],
+    ['warn', 'known_bug', about.knownBug],
+    ...list(about.strengths).map(t => ['ok', 'strength', t]),
+    ...list(about.growth).map(t => ['wip', 'growth', t]),
+  ]
+  const warns = lines.filter(l => l[0] === 'warn').length
+  lines.push(['done', 'exit', `profile loaded · 0 errors, ${warns} warning`])
+  return lines.map(([lvl, tag, text], i) => (
+    <span className={`log log--${lvl}`}>
+      <span className="log__ts">[{(0.004 + i * 0.0173).toFixed(4).padStart(9, '\u00a0')}]</span>
+      <span className="log__lvl">{lvl.toUpperCase()}</span>
+      <span className="log__tag">{tag}</span>
+      <span className="log__msg">{text}</span>
     </span>
   ))
 }
@@ -163,7 +186,7 @@ const rowBuilders = {
   contact: contactRows,
 }
 
-export default function CommandOutput({ name, onReveal }) {
+export default function CommandOutput({ name, onReveal, onClose }) {
   const build = rowBuilders[name]
   // Phase: 'loading' shows a BIOS-style loading line briefly, then 'rows' streams output.
   const reduced = prefersReducedMotion()
@@ -176,13 +199,36 @@ export default function CommandOutput({ name, onReveal }) {
     return () => clearTimeout(t)
   }, [phase])
 
+  const ref = useRef(null)
+
+  // Slow close: fade + sink, then collapse the gap so blocks below glide up.
+  const close = () => {
+    const el = ref.current
+    if (reduced || !el.animate) return onClose && onClose()
+    el.style.pointerEvents = 'none'
+    const h = `${el.offsetHeight}px`
+    const mb = getComputedStyle(el).marginBottom
+    el.animate(
+      [
+        { opacity: 1, transform: 'none', height: h, marginBottom: mb, offset: 0 },
+        { opacity: 0, transform: 'scale(0.96) translateY(-8px)', height: h, marginBottom: mb, offset: 0.5 },
+        { opacity: 0, transform: 'scale(0.96) translateY(-8px)', height: '0px', marginBottom: '0px', borderWidth: '0px' },
+      ],
+      { duration: 900, easing: 'ease-in-out', fill: 'forwards' }
+    ).onfinish = () => onClose && onClose()
+  }
+
   if (!build) return null
   const rows = build()
 
   return (
-    <section className="block" aria-label={`${name} output`}>
+    <section
+      ref={ref}
+      className="block"
+      aria-label={`${name} output`}
+    >
       <div className="live-term__bar">
-        <span className="dot r" />
+        <button type="button" className="dot r dot--btn" aria-label={`close ${name} output`} onClick={close} />
         <span className="dot y" />
         <span className="dot g" />
         <span className="live-term__title">tinkeshwar@os: ~ $ {cmdLabels[name]}</span>

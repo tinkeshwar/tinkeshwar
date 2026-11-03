@@ -129,9 +129,9 @@ export const approach = [
 ]
 
 export const about = {
-  knownBug: "once I discover I can make something work, I sometimes keep going until I've built the most complicated possible version of it. 😎",
   strengths: 'cross-domain problem solving, system architecture, rapid iteration, real-world constraints.',
   growth: 'advanced AI/ML, distributed systems, UI/UX polish, productization.',
+  knownBug: "once I discover I can make something work, I sometimes keep going until I've built the most complicated possible version of it. 😎",
 }
 
 // `icon` is a terminal-style ASCII glyph shown before each contact entry.
