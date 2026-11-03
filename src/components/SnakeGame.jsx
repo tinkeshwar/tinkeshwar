@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import ArcadeFrame, { themeColors } from './ArcadeFrame'
 
 const CELL = 10 // px per grid cell
 const BASE_INTERVAL = 140 // ms per step at start
@@ -26,7 +27,7 @@ export default function SnakeGame({ onExit }) {
     // Size the board to the space left for the canvas (wrapper minus the HUD),
     // snapped to the grid.
     const rect = wrap.getBoundingClientRect()
-    const hud = wrap.querySelector('.snake__hud')
+    const hud = wrap.querySelector('.arcade__hud')
     const hudH = hud ? hud.getBoundingClientRect().height + 8 : 0
     const availW = rect.width
     const availH = rect.height - hudH
@@ -35,11 +36,7 @@ export default function SnakeGame({ onExit }) {
     canvas.width = cols * CELL
     canvas.height = rows * CELL
 
-    const styles = getComputedStyle(document.documentElement)
-    const accent = styles.getPropertyValue('--accent').trim() || '#39ff14'
-    const accent2 = styles.getPropertyValue('--accent2').trim() || '#00e5ff'
-    const amber = styles.getPropertyValue('--amber').trim() || '#ffb000'
-    const bg = styles.getPropertyValue('--bg').trim() || '#05060a'
+    const { accent, accent2, amber, bg } = themeColors()
 
     const randFood = snake => {
       let f
@@ -158,10 +155,6 @@ export default function SnakeGame({ onExit }) {
     const onKey = e => {
       const g = game.current
       const k = e.key
-      if (k === 'Escape') {
-        onExit()
-        return
-      }
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(k)) e.preventDefault()
       if (g.dead) return
       const d = g.dir
@@ -180,23 +173,14 @@ export default function SnakeGame({ onExit }) {
   }, [])
 
   return (
-    <div className="snake" ref={wrapRef}>
-      <div className="snake__hud">
-        <span>
-          bites: <b>{score}</b>
-        </span>
-        <span className="dim">↑ ↓ ← → to move · esc to quit</span>
-      </div>
-      <canvas ref={canvasRef} className="snake__canvas" />
-      {over && (
-        <div className="snake__over" role="alert">
-          <div className="snake__over-msg">{GAME_OVER_MSG}</div>
-          <div className="dim">final bites: {score}</div>
-          <button type="button" className="snake__btn" onClick={onExit}>
-            [ exit to shell ]
-          </button>
-        </div>
-      )}
-    </div>
+    <ArcadeFrame
+      frameRef={wrapRef}
+      canvasRef={canvasRef}
+      label="bites"
+      score={score}
+      over={over}
+      message={GAME_OVER_MSG}
+      onExit={onExit}
+    />
   )
 }

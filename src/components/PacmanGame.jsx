@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import ArcadeFrame, { themeColors } from './ArcadeFrame'
 
 // Maze legend: '#' wall, '.' dot, 'o' power pellet, ' ' empty,
 // 'P' pacman start, 'G' ghost start.
@@ -27,6 +28,7 @@ const CELL = 15
 const STEP_MS = 250 // pac + ghost move cadence
 const GAME_OVER_MSG = 'Game over. The ghosts send their regards. 👻'
 const WIN_MSG = 'Maze cleared! You are officially better at this than at touching grass.'
+const FRIGHT_COLOR = '#3b5bff' // distinct from every ghost/wall color
 
 const DIRS = {
   up: { x: 0, y: -1 },
@@ -51,12 +53,7 @@ export default function PacmanGame({ onExit }) {
     canvas.width = cols * CELL
     canvas.height = rows * CELL
 
-    const styles = getComputedStyle(document.documentElement)
-    const accent = styles.getPropertyValue('--accent').trim() || '#39ff14'
-    const accent2 = styles.getPropertyValue('--accent2').trim() || '#00e5ff'
-    const amber = styles.getPropertyValue('--amber').trim() || '#ffb000'
-    const red = styles.getPropertyValue('--red').trim() || '#ff4d4d'
-    const bg = styles.getPropertyValue('--bg').trim() || '#05060a'
+    const { accent, accent2, amber, red, bg } = themeColors()
 
     // Parse the maze into a grid of walls + dots, and find spawns.
     const grid = []
@@ -88,7 +85,7 @@ export default function PacmanGame({ onExit }) {
       rows,
       cols,
       pac: { ...pac, dir: DIRS.left, next: DIRS.left, mouth: 0 },
-      ghosts: ghosts.map(g => ({ ...g, dir: DIRS.up })),
+      ghosts: ghosts.map(g => ({ ...g, sx: g.x, sy: g.y, dir: DIRS.up })),
       dotsLeft,
       fright: 0, // frames of frightened mode remaining
       dead: false,
@@ -165,7 +162,7 @@ export default function PacmanGame({ onExit }) {
       g.ghosts.forEach(gh => {
         const gx = gh.x * CELL + CELL / 2
         const gy = gh.y * CELL + CELL / 2
-        ctx.fillStyle = g.fright > 0 ? accent2 : gh.color
+        ctx.fillStyle = g.fright > 0 ? FRIGHT_COLOR : gh.color
         ctx.shadowColor = ctx.fillStyle
         ctx.shadowBlur = 8
         ctx.beginPath()
@@ -218,9 +215,9 @@ export default function PacmanGame({ onExit }) {
       for (const gh of g.ghosts) {
         if (gh.x === g.pac.x && gh.y === g.pac.y) {
           if (g.fright > 0) {
-            // eat the ghost: send it back to center-ish
-            gh.x = (g.cols / 2) | 0
-            gh.y = (g.rows / 2) | 0
+            // eat the ghost: send it back to its spawn
+            gh.x = gh.sx
+            gh.y = gh.sy
             setScore(s => s + 50)
           } else {
             g.dead = true
@@ -257,14 +254,15 @@ export default function PacmanGame({ onExit }) {
       }
 
       collide()
-      if (g.fright > 0) g.fright--
       g.ghosts.forEach(moveGhost)
       collide()
+      if (g.fright > 0) g.fright--
 
-      if (g.dotsLeft <= 0) {
+      if (!g.dead && g.dotsLeft <= 0) {
         g.won = true
         setStatus('won')
       }
+      if (g.dead || g.won) clearInterval(timer)
       draw()
     }
 
@@ -274,10 +272,6 @@ export default function PacmanGame({ onExit }) {
     const onKey = e => {
       const g = game.current
       const k = e.key
-      if (k === 'Escape') {
-        onExit()
-        return
-      }
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(k)) {
         e.preventDefault()
         if (g.dead || g.won) return
@@ -297,25 +291,14 @@ export default function PacmanGame({ onExit }) {
   }, [])
 
   return (
-    <div className="arcade">
-      <div className="arcade__hud">
-        <span>
-          score: <b>{score}</b>
-        </span>
-        <span className="dim">↑ ↓ ← → to move · esc to quit</span>
-      </div>
-      <canvas ref={canvasRef} className="arcade__canvas" />
-      {status !== 'playing' && (
-        <div className="arcade__over" role="alert">
-          <div className={`arcade__over-msg ${status === 'won' ? 'win' : ''}`}>
-            {status === 'won' ? WIN_MSG : GAME_OVER_MSG}
-          </div>
-          <div className="dim">final score: {score}</div>
-          <button type="button" className="arcade__btn" onClick={onExit}>
-            [ exit to shell ]
-          </button>
-        </div>
-      )}
-    </div>
+    <ArcadeFrame
+      canvasRef={canvasRef}
+      label="score"
+      score={score}
+      over={status !== 'playing'}
+      win={status === 'won'}
+      message={status === 'won' ? WIN_MSG : GAME_OVER_MSG}
+      onExit={onExit}
+    />
   )
 }

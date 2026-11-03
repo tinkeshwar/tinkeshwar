@@ -3,6 +3,11 @@ import { whoami, skills, projects, approach, about, contact, commands } from '..
 import SnakeGame from './SnakeGame'
 import PacmanGame from './PacmanGame'
 
+const GAMES = {
+  snake: { label: 'snake', Component: SnakeGame },
+  pacman: { label: 'pac-man', Component: PacmanGame },
+}
+
 // Build the text response for a given command.
 function respond(cmd) {
   const c = cmd.trim().toLowerCase()
@@ -101,14 +106,10 @@ export default function LiveTerminal() {
     const next = [...lines, { kind: 'cmd', text: cmd }]
     if (c === 'clear') {
       setLines([])
-    } else if (c === 'snake') {
-      next.push({ kind: 'sys', text: 'launching snake… steer with arrow keys, esc to quit.' })
+    } else if (Object.hasOwn(GAMES, c)) {
+      next.push({ kind: 'sys', text: `launching ${GAMES[c].label}… steer with arrow keys, esc to quit.` })
       setLines(next)
-      setGame('snake')
-    } else if (c === 'pacman') {
-      next.push({ kind: 'sys', text: 'launching pac-man… steer with arrow keys, esc to quit.' })
-      setLines(next)
-      setGame('pacman')
+      setGame(c)
     } else {
       const out = respond(cmd)
       if (out) out.forEach(t => next.push({ kind: 'out', text: t }))
@@ -120,9 +121,8 @@ export default function LiveTerminal() {
   }
 
   const exitGame = () => {
-    const name = game === 'pacman' ? 'pac-man' : 'snake'
     setGame(null)
-    setLines(l => [...l, { kind: 'sys', text: `${name} terminated. back to the shell.` }])
+    setLines(l => [...l, { kind: 'sys', text: `${GAMES[game].label} terminated. back to the shell.` }])
     // refocus the input after returning
     setTimeout(() => inputRef.current && inputRef.current.focus(), 0)
   }
@@ -150,6 +150,8 @@ export default function LiveTerminal() {
     }
   }
 
+  const Game = game && GAMES[game].Component
+
   return (
     <section
       className="live-term"
@@ -165,8 +167,7 @@ export default function LiveTerminal() {
         <span className="live-term__title">tinkeshwar@os: ~/shell</span>
       </div>
       <div className="live-term__body" ref={bodyRef}>
-        {game === 'snake' && <SnakeGame onExit={exitGame} />}
-        {game === 'pacman' && <PacmanGame onExit={exitGame} />}
+        {Game && <Game onExit={exitGame} />}
         {!game && lines.map((l, i) => {
           if (l.kind === 'cmd')
             return (
