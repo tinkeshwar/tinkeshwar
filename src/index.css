@@ -217,19 +217,51 @@ body::before {
 .cmd {
   color: var(--strong);
 }
-.cmdline {
-  word-break: break-word;
-}
-
 .block {
   margin: 0 0 2.2rem;
 }
 
+.cmdline {
+  word-break: break-word;
+}
+
+/* ---- command output panel (feed only; whoami keeps plain layout) ---- */
+#feed .block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 8px 30px var(--shadow);
+  overflow: hidden;
+  animation: rowin 0.25s ease both;
+}
+
+#feed .cmdline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.55rem 0.9rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.cmdline__meta {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+
 .out {
   color: var(--fg);
+  padding: 0.8rem 0.9rem;
 }
 .out .label {
   color: var(--accent2);
+}
+
+.block__exit {
+  font-size: 0.75rem;
+  padding: 0 0.9rem 0.7rem;
 }
 
 /* streamed BIOS-style rows for command output */
@@ -250,15 +282,113 @@ body::before {
 }
 
 .row-kv {
-  display: flex;
+  display: grid;
+  grid-template-columns: 11ch 1fr;
   gap: 0.9rem;
   align-items: baseline;
 }
 
-.row-kv .k {
+.k {
   color: var(--accent2);
-  white-space: pre;
-  flex: 0 0 auto;
+}
+
+.out--skills .boot-row,
+.out--approach .boot-row {
+  border-bottom: 1px dashed var(--border-soft);
+  padding: 0.45rem 0;
+}
+.out--skills .boot-row:last-child,
+.out--approach .boot-row:last-child {
+  border-bottom: 0;
+}
+
+.out--approach .row-kv {
+  grid-template-columns: 3ch 1fr;
+}
+
+.card__title {
+  display: block;
+  color: var(--strong);
+  margin-bottom: 0.15rem;
+}
+
+/* projects: card grid */
+.out--projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.9rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px rgba(var(--glow-rgb), 0.25);
+}
+.card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+/* about: label above text */
+.field {
+  display: block;
+  padding: 0.35rem 0 0.35rem 0.75rem;
+  border-left: 2px solid var(--border);
+}
+.field .label {
+  display: block;
+  font-size: 0.78rem;
+}
+.out--about .boot-row + .boot-row {
+  margin-top: 0.4rem;
+}
+
+/* contact: whole row is the link */
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--fg);
+  text-decoration: none;
+  transition: 0.15s;
+}
+.link-row .k {
+  width: 9ch;
+}
+.link-row__label {
+  flex: 1;
+  word-break: break-all;
+}
+.link-row__go {
+  color: var(--dim);
+}
+.link-row:hover,
+.link-row:focus-visible {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--strong);
+}
+.link-row:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+.link-row:hover .link-row__go {
+  color: var(--accent);
 }
 
 /* terminal-style contact glyph box holding a phosphor-green brand SVG */
@@ -282,7 +412,7 @@ body::before {
   filter: drop-shadow(0 0 4px rgba(var(--glow-rgb), 0.55));
 }
 
-.row-kv a:hover .contact-icon,
+.link-row:hover .contact-icon,
 .contact-icon:hover {
   color: var(--accent2);
   border-color: var(--accent2);
@@ -679,6 +809,10 @@ a:focus-visible {
   .blink::after {
     animation: none;
   }
+  #feed .block,
+  .boot-row {
+    animation: none;
+  }
 }
 
 /* ---- small screens ---- */
@@ -691,5 +825,12 @@ a:focus-visible {
   }
   .shell {
     padding: 1.25rem 0.9rem 4rem;
+  }
+  .out--skills .row-kv {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+  .link-row .k {
+    display: none;
   }
 }
