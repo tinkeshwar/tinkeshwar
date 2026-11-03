@@ -32,7 +32,7 @@ export default function Shell({ visible }) {
 
   return (
     <div className={`shell ${visible ? 'on' : ''}`} id="shell">
-      <Topbar />
+      <Topbar hint={hint} />
       <div className="whoami">
         <div className="whoami-left">
           <Whoami />
@@ -55,7 +55,6 @@ export default function Shell({ visible }) {
           />
         ))}
       </div>
-      <div className="hint">// {hint}</div>
       <LiveTerminal />
     </div>
   )

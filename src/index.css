@@ -632,13 +632,6 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-.hint {
-  color: var(--dim);
-  font-size: 0.78rem;
-  margin-top: 1rem;
-  border-top: 1px solid var(--border-soft);
-  padding-top: 1rem;
-}
 
 /* ---- live interactive terminal (fills remaining viewport height) ---- */
 .live-term {
@@ -1026,4 +1019,31 @@ a:focus-visible {
 @media (max-width: 600px) {
   .cf { grid-template-columns: 2ch 1fr; }
   .cf__key, .cf__eq, .cf__go { display: none; }
+}
+
+.topbar__hint {
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--dim);
+  font-size: 0.72rem;
+  font-style: italic;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.topbar__hint > span {
+  display: inline-block;
+}
+.topbar__hint.is-marquee > span {
+  animation: hintscroll var(--dur) ease-in-out infinite alternate;
+}
+.topbar__hint.is-marquee:hover > span {
+  animation-play-state: paused;
+}
+@keyframes hintscroll {
+  0%, 15% { transform: translateX(0); }
+  85%, 100% { transform: translateX(var(--shift)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .topbar__hint.is-marquee > span { animation: none; }
 }
