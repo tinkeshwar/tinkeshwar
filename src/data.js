@@ -46,10 +46,13 @@ export const hints = [
 ]
 
 export const skills = [
-  { group: 'frontend', items: ['React', 'Next.js', 'Vue', 'Nuxt.js', 'TypeScript', 'Tailwind', 'Zustand'] },
-  { group: 'backend', items: ['Node.js', 'Python', 'SQL', 'PostgreSQL', 'Docker', 'REST'] },
-  { group: 'automation', items: ['FFmpeg', 'SQLite', 'Workers', 'AI', 'FFprobe'] },
-  { group: 'embedded', items: ['Arduino', 'ESP32', 'Home Assistant', 'Sensors', 'Motor drivers', 'MQTT'] },
+  { group: 'frontend', items: ['React', 'Next.js', 'Vue', 'Nuxt.js', 'TypeScript', 'Tailwind', 'Vite'] },
+  { group: 'backend', items: ['Rust', 'Node.js', 'Python', 'FastAPI', 'REST', 'OpenAPI'] },
+  { group: 'data', items: ['PostgreSQL', 'MongoDB', 'SQLite'] },
+  { group: 'desktop', items: ['Tauri', 'Electron', 'pdf-lib'] },
+  { group: 'ai', items: ['OpenAI', 'Claude', 'MCP', 'Ollama', 'Prompt pipelines'] },
+  { group: 'automation', items: ['FFmpeg', 'FFprobe', 'Workers', 'Docker', 'CI/CD'] },
+  { group: 'embedded', items: ['ESP32', 'Arduino', 'Motor drivers', 'Sensors', 'BMS'] },
 ]
 
 export const projects = [
@@ -87,6 +90,34 @@ export const projects = [
     status: 'active',
     desc: 'Headless Sonarr replacement in Rust. Serves the Sonarr v3 API: episode parsing, season-pack imports, RSS sync and one-command migration from Sonarr.',
     stack: ['Rust', 'SQLite', 'Docker', 'TMDb', 'TVmaze'],
+  },
+  {
+    id: 'U6',
+    name: 'API Bird',
+    status: 'active',
+    desc: 'Local API workbench: projects → services → endpoints, OpenAPI/cURL import, saved requests. Exposes an MCP server so Claude can run the APIs too.',
+    stack: ['Next.js', 'React', 'MongoDB', 'MCP', 'Electron'],
+  },
+  {
+    id: 'U7',
+    name: 'Ai Git Commit',
+    status: 'active',
+    desc: 'Desktop git client for one loop: pick files, get an AI-written Conventional Commit, commit, push. Works with API, local (Ollama) or CLI (claude/codex) models.',
+    stack: ['Tauri', 'Rust', 'React', 'TypeScript', 'LLMs'],
+  },
+  {
+    id: 'U8',
+    name: 'Photo Printer',
+    status: 'active',
+    desc: 'Cross-platform app that lays out photos on A4 (grids or passport/4x6 sizes) with crop, rotate and cut lines, then exports a print-ready PDF.',
+    stack: ['Tauri', 'Rust', 'React', 'TypeScript', 'pdf-lib'],
+  },
+  {
+    id: 'U9',
+    name: 'ai-planner',
+    status: 'active',
+    desc: 'Self-hosted dev docs manager that doubles as an MCP server: AI agents create and update plans, audits, issues and docs across projects; humans read and edit them in a markdown UI.',
+    stack: ['Next.js', 'MongoDB', 'Mongoose', 'MCP', 'Docker'],
   },
 ]
 

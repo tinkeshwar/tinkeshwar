@@ -236,16 +236,6 @@ body::before {
   animation: rowin 0.25s ease both;
 }
 
-#feed .cmdline {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  padding: 0.55rem 0.9rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-}
-
 .cmdline__meta {
   margin-left: auto;
   font-size: 0.72rem;
@@ -324,16 +314,14 @@ body::before {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0.75rem 0.85rem 0.8rem;
+  padding-bottom: 0.8rem;
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 6px;
-  background: var(--surface);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 0 0 1px var(--border-soft), 0 8px 30px var(--shadow);
+  overflow: hidden;
   font-size: 0.8rem;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-}
-.card--b {
-  border-left-color: var(--amber);
 }
 .card:hover {
   border-color: var(--accent);
@@ -341,16 +329,23 @@ body::before {
   transform: translateY(-2px);
 }
 .card__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.55rem;
-  border-bottom: 1px dashed var(--border);
+  margin-bottom: 0.6rem;
+}
+.card__head .st {
+  margin-left: auto;
+  font-size: 0.72rem;
 }
 .card__path {
   font-size: 0.72rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card .card__title,
+.card__desc,
+.card__stack {
+  padding: 0 0.85rem;
 }
 .card__desc {
   line-height: 1.5;
@@ -358,7 +353,7 @@ body::before {
 .card__stack {
   display: flex;
   flex-wrap: wrap;
-  margin: auto -0.12rem 0;
+  margin-top: auto;
   padding-top: 0.65rem;
 }
 .card__stack .tag {

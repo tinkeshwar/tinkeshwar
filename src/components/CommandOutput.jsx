@@ -72,8 +72,11 @@ function skillsRows() {
 function projectsRows() {
   return projects.map(p => (
     <span className={`card card--${p.status === 'active' ? 'a' : 'b'}`}>
-      <span className="card__head">
-        <span className="card__path dim">
+      <span className="card__head live-term__bar">
+        <span className="dot r" />
+        <span className="dot y" />
+        <span className="dot g" />
+        <span className="card__path live-term__title">
           ~/projects/<span className="k">{p.id}</span>
         </span>
         <span className={`st ${p.status === 'active' ? 'a' : 'b'}`}>
@@ -163,8 +166,11 @@ export default function CommandOutput({ name, onReveal }) {
 
   return (
     <section className="block" aria-label={`${name} output`}>
-      <div className="cmdline">
-        <span className="prompt">$</span> <span className="cmd">{cmdLabels[name]}</span>
+      <div className="live-term__bar">
+        <span className="dot r" />
+        <span className="dot y" />
+        <span className="dot g" />
+        <span className="live-term__title">tinkeshwar@os: ~ $ {cmdLabels[name]}</span>
         <span className="cmdline__meta">{done ? `${rows.length} rows` : 'running…'}</span>
       </div>
       <div className={`out out--${name}`}>
