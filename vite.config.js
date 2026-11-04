@@ -16,11 +16,11 @@ const setMeta = (html, keys, value) =>
 const sitemap = () => `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-${pages.map(p => `  <url><loc>${SITE}/projects/${p.slug}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
+${pages.map(p => `  <url><loc>${SITE}${p.path}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n')}
 </urlset>
 `
 
-// Build: dist/projects/<slug>.html per project page (own title/description/OG tags) + sitemap.xml.
+// Build: dist/<path>.html per page (projects, /about, /contact) (own title/description/OG tags) + sitemap.xml.
 function projectPages() {
   return {
     name: 'project-pages',
@@ -35,17 +35,17 @@ function projectPages() {
     generateBundle(_, bundle) {
       const index = bundle['index.html'].source
       for (const p of pages) {
-        const url = `${SITE}/projects/${p.slug}`
+        const url = SITE + p.path
         const title = esc(`${p.name} — Tinkeshwar Singh`)
         const desc = esc(p.desc)
+        const person = { '@type': 'Person', '@id': `${SITE}/#person`, name: 'Tinkeshwar Singh', url: `${SITE}/` }
         const ld = JSON.stringify({
           '@context': 'https://schema.org',
-          '@type': 'CreativeWork',
+          '@type': p.schema ?? 'CreativeWork',
           name: p.name,
           description: p.desc,
           url,
-          keywords: p.stack.join(', '),
-          author: { '@type': 'Person', '@id': `${SITE}/#person`, name: 'Tinkeshwar Singh', url: `${SITE}/` },
+          ...(p.stack ? { keywords: p.stack.join(', '), author: person } : { mainEntity: person }),
         }).replace(/</g, '\\u003c')
         let html = index
           .replace(/<title>.*?<\/title>/s, () => `<title>${title}</title>`)
@@ -55,10 +55,10 @@ function projectPages() {
         html = setMeta(html, 'og:title|twitter:title', title)
         html = setMeta(html, 'description|og:description|twitter:description', desc)
         html = setMeta(html, 'og:url', url)
-        html = setMeta(html, 'og:type', 'article')
+        html = setMeta(html, 'og:type', p.ogType ?? 'article')
         html = setMeta(html, 'og:image:alt', title)
-        html = setMeta(html, 'keywords', esc(['Tinkeshwar Singh', p.name, ...p.stack].join(', ')))
-        this.emitFile({ type: 'asset', fileName: `projects/${p.slug}.html`, source: html })
+        html = setMeta(html, 'keywords', esc(['Tinkeshwar Singh', p.name, ...(p.stack ?? [])].join(', ')))
+        this.emitFile({ type: 'asset', fileName: `${p.path.slice(1)}.html`, source: html })
       }
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() })
     },

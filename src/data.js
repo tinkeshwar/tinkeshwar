@@ -554,5 +554,41 @@ export const contact = [
   { key: 'email', icon: '✉', label: 'hello@tinkeshwar.com', href: 'mailto:hello@tinkeshwar.com' },
 ]
 
-// Projects with their own page at /projects/<slug>.
-export const pages = projects.filter(p => p.detail)
+const projectPages = projects
+  .filter(p => p.detail)
+  .map(p => ({ ...p, path: `/projects/${p.slug}` }))
+const list = t => t.replace(/\.$/, '').split(', ')
+
+// Every standalone page, keyed by `path`. /about and /contact are SEO-only:
+// pre-rendered and in the sitemap, but nothing in the UI links to them.
+// `schema`/`ogType` default to CreativeWork/article (project pages).
+export const pages = [
+  ...projectPages,
+  {
+    path: '/about',
+    name: 'About',
+    desc: `About Tinkeshwar Singh: ${whoami.subtitle.replace(/ • /g, ', ')}. Background, approach, strengths and what I'm learning next.`,
+    schema: 'ProfilePage',
+    ogType: 'profile',
+    detail: {
+      sections: [
+        { title: 'whoami', text: whoami.bio },
+        { title: 'approach', list: approach.map(a => `${a.title}: ${a.desc}`) },
+        { title: 'strengths', list: list(about.strengths) },
+        { title: 'growing into', list: list(about.growth) },
+        { title: 'known bug', text: [about.knownBug] },
+        { title: 'projects', links: projectPages.map(p => [p.name, p.path]) },
+      ],
+    },
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    desc: 'Contact Tinkeshwar Singh, Full Stack Developer, IoT Engineer and Automation Architect, by email, GitHub or LinkedIn.',
+    schema: 'ContactPage',
+    ogType: 'website',
+    detail: {
+      sections: [{ title: 'reach the human behind this terminal', links: contact.map(c => [c.label, c.href]) }],
+    },
+  },
+]

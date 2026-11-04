@@ -4,16 +4,17 @@ import Shell from './components/Shell'
 import ProjectPage from './components/ProjectPage'
 import { pages } from './data'
 
-// /projects/api-bird → that project. Old #/projects/u1 links still resolve (by id).
-const PROJECT_PATH = /^\/projects\/([\w-]+?)(?:\.html)?\/?$/
+// /projects/api-bird, /about, … → that page. Old #/projects/u1 links still resolve (by id).
 const PROJECT_HASH = /^#\/projects\/([\w-]+)$/
-const findProject = key =>
-  key && pages.find(p => [p.slug, p.id.toLowerCase()].includes(key.toLowerCase()))
-const projectFromUrl = () =>
-  findProject(location.pathname.match(PROJECT_PATH)?.[1] ?? location.hash.match(PROJECT_HASH)?.[1])
+const findPage = (pathname, hash = '') => {
+  const path = pathname.toLowerCase().replace(/(\.html|\/)$/, '')
+  const id = hash.match(PROJECT_HASH)?.[1].toLowerCase()
+  return pages.find(p => p.path === path) ?? (id && pages.find(p => p.id?.toLowerCase() === id))
+}
+const pageFromUrl = () => findPage(location.pathname, location.hash)
 
 export default function App() {
-  const [project, setProject] = useState(projectFromUrl)
+  const [project, setProject] = useState(pageFromUrl)
   // Deep links skip the boot animation.
   const [booted, setBooted] = useState(() => !!project)
   const homeScroll = useRef(0)
@@ -22,10 +23,9 @@ export default function App() {
     // The app restores the home scroll itself; stop the browser competing with it.
     history.scrollRestoration = 'manual'
     const onRoute = () => {
-      const next = projectFromUrl()
-      // Move legacy hash links (and id/.html variants) onto the canonical path.
-      if (next && location.pathname + location.hash !== `/projects/${next.slug}`)
-        history.replaceState(null, '', `/projects/${next.slug}`)
+      const next = pageFromUrl()
+      // Move legacy hash links (and .html / trailing-slash variants) onto the canonical path.
+      if (next && location.pathname + location.hash !== next.path) history.replaceState(null, '', next.path)
       if (next) homeScroll.current = window.scrollY
       setProject(next)
       if (!next) requestAnimationFrame(() => window.scrollTo(0, homeScroll.current))
@@ -36,7 +36,7 @@ export default function App() {
       const a = e.target.closest('a')
       if (!a || a.target || a.origin !== location.origin || a.hash) return
       if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
-      if (a.pathname !== '/' && !findProject(a.pathname.match(PROJECT_PATH)?.[1])) return
+      if (a.pathname !== '/' && !findPage(a.pathname)) return
       e.preventDefault()
       history.pushState(null, '', a.href)
       onRoute()

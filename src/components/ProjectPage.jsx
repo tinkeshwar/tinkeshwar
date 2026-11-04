@@ -16,24 +16,26 @@ export default function ProjectPage({ project: p }) {
         <span className="dot r" aria-hidden="true" />
         <span className="dot y" aria-hidden="true" />
         <span className="dot g" aria-hidden="true" />
-        <span className="path">tinkeshwar@os:~/projects/{p.slug}$</span>
+        <span className="path">tinkeshwar@os:~{p.path}$</span>
         <a className="project__back" href="/">cd ..</a>
       </div>
 
       <article className="block project__doc">
         <div className="live-term__bar">
-          <span className="live-term__title">tinkeshwar@os: ~ $ cat ./projects/{p.slug}/README.md</span>
+          <span className="live-term__title">tinkeshwar@os: ~ $ cat .{p.path}/README.md</span>
         </div>
         <div className="out">
           <header className="project__hd">
-            <span className="dim">~/projects/<span className="k">{p.slug}</span></span>
+            <span className="dim">~{p.path}</span>
             <h1>{p.name}</h1>
             <p className="card__desc dim">{p.desc}</p>
             <div className="project__meta">
-              <span className="st a">
-                <span className="st__dot" aria-hidden="true" />
-                {p.status}
-              </span>
+              {p.status && (
+                <span className="st a">
+                  <span className="st__dot" aria-hidden="true" />
+                  {p.status}
+                </span>
+              )}
               {p.detail.meta?.map(([k, v]) => (
                 <span key={k}>
                   <span className="dim">{k}=</span>
@@ -42,7 +44,7 @@ export default function ProjectPage({ project: p }) {
               ))}
             </div>
             <div>
-              {p.stack.map(s => (
+              {p.stack?.map(s => (
                 <span className="tag" key={s}>{s}</span>
               ))}
             </div>
@@ -58,6 +60,13 @@ export default function ProjectPage({ project: p }) {
               {s.list && (
                 <ul>
                   {s.list.map((t, i) => <li key={i}>{t}</li>)}
+                </ul>
+              )}
+              {s.links && (
+                <ul>
+                  {s.links.map(([label, href]) => (
+                    <li key={href}><a href={href}>{label}</a></li>
+                  ))}
                 </ul>
               )}
               {s.pre && <pre>{s.pre}</pre>}
